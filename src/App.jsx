@@ -72,8 +72,10 @@ function App() {
       console.log(response.data);
       getData(); //重新更新產品列表
       closeModal(); //關閉modal
+      alert(modalType === 'add' ? '新增產品資料成功' : '更新產品資料成功');
     } catch (error) {
       (console.log('更新產品資料錯誤'), error.response);
+      alert('更新產品資料錯誤');
     }
   };
   //刪除產品資料
@@ -85,8 +87,10 @@ function App() {
       console.log(response.data);
       getData();
       closeModal();
+      alert('刪除產品資料成功'); //顯示成功訊息
     } catch (error) {
       console.log('刪除產品資料錯誤', error.response);
+      alert('刪除產品資料錯誤'); //顯示錯誤訊息
     }
   };
   //處理表單填值
@@ -188,6 +192,7 @@ function App() {
         setIsAuth(true);
         getData();
       } catch (error) {
+        alert('登入狀態已過期,請重新登入');
         console.log('登入驗證失敗', error.response);
       }
     };
@@ -443,7 +448,7 @@ function App() {
                           原價
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="origin_price"
                           name="origin_price"
                           className="form-control"
@@ -457,11 +462,12 @@ function App() {
                           售價
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="price"
                           name="price"
                           className="form-control"
                           placeholder="售價"
+                          min="0"
                           value={templateProduct.price}
                           onChange={(e) => modalHandleInputChange(e)}
                         />
