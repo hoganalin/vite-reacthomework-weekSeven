@@ -7,6 +7,7 @@ const API_PATH = import.meta.env.VITE_API_PATH;
 
 //引入style.css
 import './assets/style.css';
+import { set } from 'lodash';
 function App() {
   //建立新增產品相關Modal useRef
   let myModal = useRef();
@@ -49,6 +50,7 @@ function App() {
     try {
       const res = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products`);
       setProducts(res.data.products);
+      setPagination(res.data.pagination);
     } catch (error) {
       console.log(error.response);
     }
