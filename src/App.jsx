@@ -27,7 +27,6 @@ import './assets/style.css';
 import ProductModal from '../components/ProductModal';
 import Pagination from '../components/Pagination';
 import Login from './views/Login';
-import { size } from 'lodash';
 
 function App() {
   const [isAuth, setIsAuth] = useState(false); // 登入狀態
