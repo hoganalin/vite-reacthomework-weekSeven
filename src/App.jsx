@@ -49,7 +49,7 @@ function App() {
       setProducts(response.data.products);
       setPagination(response.data.pagination); //也把分頁儲存
     } catch (error) {
-      // console.log(`取得產品資料錯誤`, error.response?.data?.message);
+      console.log(`取得產品資料錯誤`, error.response?.data?.message);
     }
   };
 
