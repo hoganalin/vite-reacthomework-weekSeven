@@ -2,10 +2,24 @@ import { useState } from 'react';
 import axios from 'axios';
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
+import { useForm } from 'react-hook-form';
+import EmailValidation from '../utils/validation';
 export default function Login({ getData, setIsAuth }) {
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
+  // const [formData, setFormData] = useState({
+  //   username: '',
+  //   password: '',
+  // });
+  //以上都不需要,要改為使用useForm
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      username: '',
+      password: '',
+    },
   });
   //處理表單填值
   const handleInputChange = (e) => {
@@ -15,9 +29,9 @@ export default function Login({ getData, setIsAuth }) {
       [name]: value,
     }));
   };
-  const handleSubmit = async (e) => {
+  const handleSubmitLogin = async (formData) => {
     //處理提交表單
-    e.preventDefault();
+    // e.preventDefault();
     try {
       const response = await axios.post(`${API_BASE}/admin/signin`, formData);
       console.log(response.data);
@@ -27,9 +41,9 @@ export default function Login({ getData, setIsAuth }) {
       //設定axios的預設headers
       axios.defaults.headers.common.Authorization = `${token}`;
       //載入產品資料
-      getData();
+      // getData();
       //更新登入狀態為true
-      setIsAuth(true);
+      // setIsAuth(true);
     } catch (error) {
       console.log('提交表單出錯了,error為', error);
     }
@@ -37,7 +51,7 @@ export default function Login({ getData, setIsAuth }) {
   return (
     <div className="container min-vh-100 d-flex justify-content-center align-items-center">
       <div className="w-100" style={{ maxWidth: '500px' }}>
-        <form action="" onSubmit={handleSubmit}>
+        <form action="" onSubmit={handleSubmit(handleSubmitLogin)}>
           <h1>請先登入</h1>
           <div className="form-floating mb-3 ">
             <input
@@ -46,10 +60,15 @@ export default function Login({ getData, setIsAuth }) {
               id="floatingInput"
               placeholder="name@example.com"
               name="username"
-              value={formData.username}
-              onChange={handleInputChange}
+              {...register('username', EmailValidation)}
+
+              // value={formData.username}
+              // onChange={handleInputChange}
             />
             <label htmlFor="floatingInput">Email address</label>
+            {errors.username && (
+              <div className="text-danger mt-1">{errors.username.message}</div>
+            )}
           </div>
           <div className="form-floating mb-3">
             <input
@@ -58,12 +77,16 @@ export default function Login({ getData, setIsAuth }) {
               id="floatingPassword"
               placeholder="Password"
               name="password"
-              value={formData.password}
-              onChange={handleInputChange}
+              {...register('password', { required: '請輸入密碼' })}
+              // value={formData.password}
+              // onChange={handleInputChange}
             />
             <label htmlFor="floatingPassword">Password</label>
+            {errors.password && (
+              <div className="text-danger mt-1">{errors.password.message}</div>
+            )}
           </div>
-          <button className="btn btn-primary" type="submit">
+          <button className="btn btn-primary" type="submit" disabled={!isValid}>
             登入
           </button>
         </form>
