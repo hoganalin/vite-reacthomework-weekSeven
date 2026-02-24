@@ -10,6 +10,10 @@ import Cart from './views/front/Cart';
 import NotFound from './views/front/NotFound';
 import Login from './views/Login';
 import Checkout from './views/front/Checkout';
+import AdminLayout from './layout/AdminLayout';
+import AdminProducts from './views/admin/AdminProducts';
+import AdminOrders from './views/admin/AdminOrders';
+import ProtectedRoute from '../components/ProtectedRoute';
 const router = createHashRouter([
   {
     path: '/',
@@ -38,6 +42,24 @@ const router = createHashRouter([
       {
         path: 'login',
         element: <Login />,
+      },
+    ],
+  },
+  {
+    path: 'admin',
+    element: (
+      <ProtectedRoute>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: 'product',
+        element: <AdminProducts />,
+      },
+      {
+        path: 'order',
+        element: <AdminOrders />,
       },
     ],
   },

@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { createAsyncMessage } from '../src/slices/messageSlice';
 export default function ProductModal({
   modalType,
   templateProduct,
@@ -8,10 +10,11 @@ export default function ProductModal({
 
   getData,
 }) {
+  const dispatch = useDispatch();
   const API_BASE = import.meta.env.VITE_API_BASE;
   const API_PATH = import.meta.env.VITE_API_PATH;
   const fileInputRef = useRef(null);
-  const [tempData, setTempData] = useState({ templateProduct });
+  const [tempData, setTempData] = useState(templateProduct);
   //新增useEffect
   useEffect(() => {
     setTempData(templateProduct);
@@ -89,12 +92,15 @@ export default function ProductModal({
     try {
       const response = await axios[method](url, productData);
       console.log(response.data);
+      // dispatch(createAsyncMessage(response.data));
       getData(); //重新更新產品列表
       closeModal(); //關閉modal
-      alert(modalType === 'create' ? '新增產品資料成功' : '更新產品資料成功');
+      // alert(modalType === 'create' ? '新增產品資料成功' : '更新產品資料成功');
+      dispatch(createAsyncMessage(response.data));
     } catch (error) {
       (console.log('更新產品資料錯誤'), error.response);
-      alert(`更新產品資料錯誤,原因是${error.response.data.message}`);
+      // alert(`更新產品資料錯誤,原因是${error.response.data.message}`);
+      dispatch(createAsyncMessage(error.response.data));
     }
   };
   //刪除產品資料

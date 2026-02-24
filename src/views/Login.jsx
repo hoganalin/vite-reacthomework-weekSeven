@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -9,6 +10,7 @@ export default function Login({ getData, setIsAuth }) {
   //   username: '',
   //   password: '',
   // });
+  const navigate = useNavigate();
   //以上都不需要,要改為使用useForm
   const {
     register,
@@ -44,6 +46,8 @@ export default function Login({ getData, setIsAuth }) {
       // getData();
       //更新登入狀態為true
       // setIsAuth(true);
+      //導航頁面到後台產品列表
+      navigate('/admin/AdminProducts');
     } catch (error) {
       console.log('提交表單出錯了,error為', error);
     }
